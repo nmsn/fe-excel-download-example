@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">下载</button>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    /** 下载 post 请求文件 */
+    const loadPostFile = ({ data, name, type }) => {
+      const blob = new Blob([data], { type });
+      console.log(data, name, type, blob);
+      const link = document.createElement("a");
+      const url = window.URL.createObjectURL(blob);
+      link.style.display = "none";
+      link.href = url;
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    };
+
+    const btn = document.getElementById("btn");
+
+    btn.onclick = async () => {
+      const res = await axios.post(
+        "/exportExcel",
+        {},
+        {
+          // 要有这个字段
+          responseType: "blob",
+        },
+      );
+
+      const { headers, data } = res;
+      const name = decodeURI(headers?.["content-disposition"]?.split("=")?.[1]);
+      const type = headers?.["content-type"];
+      console.log({ data, name, type });
+      loadPostFile({ data, name, type });
+    };
+  </script>
+</html>
