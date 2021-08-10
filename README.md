@@ -39,3 +39,9 @@ post 响应二进制文件能够实现文件下载，但存在一些问题
 ## 疑问
 
 是否可以在后端本地生成临时 url，当请求过后将本地临时文件删除
+
+## 其他
+
+成熟工具库 
+
+[FileSaver](https://github.com/eligrey/FileSaver.js)
